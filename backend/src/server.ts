@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { Server as IOServer } from 'socket.io';
+import authRoutes from './routes/auth';
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ app.use(rateLimit({ windowMs: 1 * 60 * 1000, max: 100 }));
 
 app.get('/api/health', (_, res) => res.json({ ok: true }));
 
-// TODO: import routes, middlewares, socket handlers...
+app.use("/api/auth", authRoutes);
 
 io.on('connection', (socket) => {
   console.log('Socket connected', socket.id);
@@ -34,10 +35,10 @@ io.on('connection', (socket) => {
 const PORT = process.env.PORT || 4000;
 mongoose.connect(process.env.MONGO_URI || '')
   .then(() => {
-    server.listen(PORT, () => console.log(`API listening on ${PORT}`));
+    server.listen(PORT, () => console.log(`🚀 API listening on ${PORT}`));
   })
   .catch(err => {
-    console.error('MongoDB connection error', err);
+    console.error('❌ MongoDB connection error', err);
     process.exit(1);
   });
 
