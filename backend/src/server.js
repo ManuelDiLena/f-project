@@ -9,6 +9,8 @@ dotenv.config();
 
 import connectDB from './config/db.js';
 
+import authRoutes from './routes/authRoutes.js';
+
 const app = express();
 
 // Middlewares
@@ -26,6 +28,9 @@ app.use(limiter);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
+
+// Routes
+app.use('/api/auth', authRoutes);
 
 // Connect DB and start server
 const PORT = process.env.PORT || 4000;
